@@ -15,11 +15,11 @@ The topics and frames of individual load cells are contained in the `dji_msgs.To
 All topics are relative to the node namespace (`robot_name`).
 | Topic | Direction | Type | Description |
 |---|---|---|---|
-| `sensor/load_cell_{}` | Sub | `std_msgs/Float32` | Load cell readings (kg) |
-| `rope_force` | Pub | `geometry_msgs/WrenchStamped` | Exerted rope force (N) |
+| `sensor/load_cell_X_weight` | Sub | `std_msgs/Float32` | Load cell readings (kg) |
+| `alars_rope_estimation/rope_force` | Pub | `geometry_msgs/WrenchStamped` | Exerted rope force (N) |
 
 ### Required TF
-`<robot_name>/rope_base_link` → `<robot_name>/LoadCell{}`
+`<robot_name>/rope_base_link` → `<robot_name>/load_cell_X_link`
 
 
 ## Launch

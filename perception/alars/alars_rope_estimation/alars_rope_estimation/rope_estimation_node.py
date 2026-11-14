@@ -38,7 +38,7 @@ class RopeEstimationNode(Node):
 
         # tf
         ns = self.get_namespace().strip("/")
-        lc_links = [DJILinks.LOAD_CELL_1, DJILinks.LOAD_CELL_2, DJILinks.LOAD_CELL_3, DJILinks.LOAD_CELL_4]
+        lc_links = [DJILinks.LOAD_CELL_1_LINK, DJILinks.LOAD_CELL_2_LINK, DJILinks.LOAD_CELL_3_LINK, DJILinks.LOAD_CELL_4_LINK]
         self.frame_lcs = [f"{ns}/{lc_links[i]}" for i in range(NUM_LOAD_CELLS)]
         self.frame_rope = f"{ns}/{DJILinks.ROPE_BASE_LINK}" # the rope pivot
 
@@ -49,13 +49,13 @@ class RopeEstimationNode(Node):
         self.readings_timestamps = np.zeros(NUM_LOAD_CELLS) # timestamps of the load cell readings
 
         # subscribers
-        load_cell_topics = [DJITopics.LOAD_CELL_1, DJITopics.LOAD_CELL_2, DJITopics.LOAD_CELL_3, DJITopics.LOAD_CELL_4,]
+        load_cell_topics = [DJITopics.LOAD_CELL_1_WEIGHT_TOPIC, DJITopics.LOAD_CELL_2_WEIGHT_TOPIC, DJITopics.LOAD_CELL_3_WEIGHT_TOPIC, DJITopics.LOAD_CELL_4_WEIGHT_TOPIC]
         self.lc_subs = [
             self.create_subscription(Float32, load_cell_topics[i], lambda msg, idx=i: self.load_cell_cb(msg, idx), 10)
             for i in range(NUM_LOAD_CELLS)
         ]
         # publishers
-        self.force_pub = self.create_publisher(WrenchStamped, DJITopics.ROPE_ESTIMATION_OUTPUT, 10)
+        self.force_pub = self.create_publisher(WrenchStamped, DJITopics.ROPE_FORCE_ESTIMATE_TOPIC, 10)
 
         self.equation_matrix : NDArray[np.float64] | None = None
 
@@ -77,7 +77,6 @@ class RopeEstimationNode(Node):
             return None
 
         # Extract positions
-        # TODO: check that z part is 0 (i.e., all load cells are in the same plane)
         equation_matrix = np.ones((3,NUM_LOAD_CELLS)) # 3 equations:
         # force balance: sum(F_i) = -F_z
         # torque balance 1: sum(y_i * F_i) = - ROPE_LEVER_ARM * F_y

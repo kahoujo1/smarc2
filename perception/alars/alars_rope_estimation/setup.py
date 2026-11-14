@@ -21,7 +21,7 @@ setup(
     zip_safe=True,
     maintainer='Josef Kahoun',
     maintainer_email='kahoun@kth.se',
-    description='Estimates rope direction and force from 3 winch load cells.',
+    description='Estimates rope direction and force from 3/4 winch load cells.',
     license='MIT',
     extras_require={
         'test': [
